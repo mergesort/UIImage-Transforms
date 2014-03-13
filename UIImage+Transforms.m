@@ -1,9 +1,9 @@
 //
 //  UIImage+Transforms.m
-//  Beta
+//  mergesort
 //
 //  Created by Joe on 11/7/13.
-//  Copyright (c) 2013 Betaworks. All rights reserved.
+//  Copyright (c) 2013 Picks. All rights reserved.
 //
 
 #import "UIImage+Transforms.h"
@@ -62,6 +62,89 @@
     UIGraphicsEndImageContext();
     
     return outputImage;
+}
+
++ (UIImage *)stitchImages:(NSArray *)images vertically:(BOOL)vertically
+{
+    CGSize canvasSize;
+    CGFloat canvasWidth = 0;
+    CGFloat canvasHeight = 0;
+    
+    if (vertically)
+    {
+        for (UIImage *image in images)
+        {
+            if (canvasWidth < image.size.width)
+            {
+                canvasWidth = image.size.width;
+            }
+            canvasHeight += image.size.height;
+        }
+        canvasSize = CGSizeMake(canvasWidth, canvasHeight);
+    }
+    else
+    {
+        for (UIImage *image in images)
+        {
+            if (canvasHeight < image.size.height)
+            {
+                canvasHeight = image.size.height;
+            }
+            canvasWidth += image.size.width;
+        }
+        canvasSize = CGSizeMake(canvasWidth, canvasHeight);
+    }
+    
+    UIGraphicsBeginImageContext(canvasSize);
+    
+    CGFloat xPosition = 0;
+    CGFloat yPosition = 0;
+    
+    for (UIImage *image in images)
+    {
+        [image drawAtPoint:CGPointMake(xPosition, yPosition)];
+        if (vertically)
+        {
+            yPosition += image.size.height;
+        }
+        else
+        {
+            xPosition += image.size.width;
+        }
+    }
+    
+    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return finalImage;
+}
+
+- (UIImage *)colorizeImageWithColor:(UIColor *)color
+{
+    UIGraphicsBeginImageContext(self.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGRect area = CGRectMake(0, 0, self.size.width, self.size.height);
+    
+    CGContextScaleCTM(context, 1, -1);
+    CGContextTranslateCTM(context, 0, -area.size.height);
+    
+    CGContextSaveGState(context);
+    CGContextClipToMask(context, area, self.CGImage);
+    
+    [color set];
+    CGContextFillRect(context, area);
+    
+    CGContextRestoreGState(context);
+    
+    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    
+    CGContextDrawImage(context, area, self.CGImage);
+    
+    UIImage *colorizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return colorizedImage;
 }
 
 
