@@ -15,6 +15,7 @@
 - (UIImage *)tintedGradientImageWithColor:(UIColor *)tintColor;
 - (UIImage *)tintedImageWithColor:(UIColor *)tintColor;
 - (UIImage *)imageScaledToSize:(CGSize)size;
+- (UIImage *)imageSmoothlyScaledToSize:(CGSize)size;
 + (UIImage *)imageFromLayer:(CALayer *)layer;
 + (UIImage *)stitchImages:(NSArray *)images vertically:(BOOL)vertically;
 - (UIImage *)colorizeImageWithColor:(UIColor *)color;
