@@ -148,30 +148,28 @@
 }
 
 - (UIImage *)colorizeImageWithColor:(UIColor *)color withBlendMode:(CGBlendMode)blendMode{
-    UIGraphicsBeginImageContext(self.size);
-    
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0);
+    //
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGRect area = CGRectMake(0, 0, self.size.width, self.size.height);
-    
-    CGContextScaleCTM(context, 1, -1);
-    CGContextTranslateCTM(context, 0, -area.size.height);
-    
+    CGRect imageRect = CGRectMake(0, 0, self.size.width, self.size.height);
+    // Flip the image
+    CGContextTranslateCTM(context, 0.0, imageRect.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
     CGContextSaveGState(context);
-    CGContextClipToMask(context, area, self.CGImage);
-    
-    [color set];
-    CGContextFillRect(context, area);
-    
-    CGContextRestoreGState(context);
-    
+    CGContextDrawImage(context, imageRect, self.CGImage);
+    //
+    // Create Clip Mask from Image
+    CGContextClipToMask(context, imageRect, self.CGImage);
+    // Color it
+    CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextSetBlendMode(context, blendMode);
-    
-    CGContextDrawImage(context, area, self.CGImage);
-    
-    UIImage *colorizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    //
+    CGContextAddRect(context, imageRect);
+    CGContextDrawPath(context, kCGPathFill);
+    CGContextRestoreGState(context);
+    UIImage *ret = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
-    return colorizedImage;
+    return ret;
     
 }
 
