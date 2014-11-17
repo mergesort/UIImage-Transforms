@@ -142,8 +142,12 @@
     return finalImage;
 }
 
-- (UIImage *)colorizeImageWithColor:(UIColor *)color
-{
+- (UIImage *)colorizeImageWithColor:(UIColor *)color {
+    
+    return [self colorizeImageWithColor:color withBlendMode:kCGBlendModeMultiply];
+}
+
+- (UIImage *)colorizeImageWithColor:(UIColor *)color withBlendMode:(CGBlendMode)blendMode{
     UIGraphicsBeginImageContext(self.size);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -160,7 +164,7 @@
     
     CGContextRestoreGState(context);
     
-    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    CGContextSetBlendMode(context, blendMode);
     
     CGContextDrawImage(context, area, self.CGImage);
     
@@ -168,6 +172,7 @@
     UIGraphicsEndImageContext();
     
     return colorizedImage;
+    
 }
 
 

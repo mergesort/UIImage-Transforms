@@ -19,5 +19,6 @@
 + (UIImage *)imageFromLayer:(CALayer *)layer;
 + (UIImage *)stitchImages:(NSArray *)images vertically:(BOOL)vertically;
 - (UIImage *)colorizeImageWithColor:(UIColor *)color;
+- (UIImage *)colorizeImageWithColor:(UIColor *)color withBlendMode:(CGBlendMode)blendMode;
 
 @end
