@@ -173,6 +173,27 @@
     
 }
 
++ (UIImage *)paddedImage:(UIImage *)image paddingInsets:(UIEdgeInsets)insets
+{
+//    UIEdgeInsetsMake(<#CGFloat top#>, <#CGFloat left#>, <#CGFloat bottom#>, <#CGFloat right#>)
+//    leftPadding:(CGFloat)left rightPadding:(CGFloat)right topPadding:(CGFloat)top bottomPadding:(CGFloat)bottom
+    CGFloat const width = image.size.width+insets.left+insets.right;
+    CGFloat const height = image.size.height+insets.top+insets.bottom;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(width, height), NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    UIGraphicsPushContext(context);
+
+    CGPoint origin = CGPointMake(insets.left, insets.top);
+    [image drawAtPoint:origin];
+
+    UIGraphicsPopContext();
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return newImage;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private methods

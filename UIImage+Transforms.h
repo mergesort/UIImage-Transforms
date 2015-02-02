@@ -17,6 +17,7 @@
 - (UIImage *)imageScaledToSize:(CGSize)size;
 - (UIImage *)imageSmoothlyScaledToSize:(CGSize)size;
 + (UIImage *)imageFromLayer:(CALayer *)layer;
++ (UIImage *)paddedImage:(UIImage *)image paddingInsets:(UIEdgeInsets)insets;
 + (UIImage *)stitchImages:(NSArray *)images vertically:(BOOL)vertically;
 - (UIImage *)colorizeImageWithColor:(UIColor *)color;
 - (UIImage *)colorizeImageWithColor:(UIColor *)color withBlendMode:(CGBlendMode)blendMode;
